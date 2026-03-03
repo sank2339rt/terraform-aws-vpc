@@ -8,7 +8,7 @@ A Terraform module for provisioning a production-ready AWS VPC with public, priv
 
 ```hcl
 module "vpc" {
-  source = "./modules/vpc"
+  source = "git::https://github.com/daws-88s/terraform-aws-vpc.git?ref=main"
 
   project     = "roboshop"
   environment = "dev"
@@ -37,22 +37,6 @@ module "vpc" {
 
 ---
 
-## Requirements
-
-| Name | Version |
-|------|---------|
-| terraform | >= 1.0 |
-| aws | >= 5.0 |
-
----
-
-## Providers
-
-| Name | Version |
-|------|---------|
-| aws | >= 5.0 |
-
----
 
 ## Resources
 
@@ -111,8 +95,6 @@ module "vpc" {
 | public_subnet_ids | List of public subnet IDs |
 | private_subnet_ids | List of private subnet IDs |
 | database_subnet_ids | List of database subnet IDs |
-| nat_gateway_id | The ID of the NAT Gateway |
-| internet_gateway_id | The ID of the Internet Gateway |
 
 ---
 
@@ -136,35 +118,7 @@ roboshop-dev-database-us-east-1a
 
 ## Architecture
 
-```
-                          Internet
-                             │
-                    ┌────────▼────────┐
-                    │ Internet Gateway │
-                    └────────┬────────┘
-                             │
-              ┌──────────────▼──────────────┐
-              │         VPC (main)           │
-              │                              │
-              │  ┌─────────────────────┐     │
-              │  │   Public Subnets    │     │
-              │  │  (map public IP)    │     │
-              │  │                     │     │
-              │  │  ┌───────────────┐  │     │
-              │  │  │  NAT Gateway  │  │     │
-              │  │  └───────┬───────┘  │     │
-              │  └──────────┼──────────┘     │
-              │             │                │
-              │  ┌──────────▼──────────┐     │
-              │  │   Private Subnets   │     │
-              │  └─────────────────────┘     │
-              │                              │
-              │  ┌─────────────────────┐     │
-              │  │  Database Subnets   │     │
-              │  └─────────────────────┘     │
-              │                              │
-              └──────────────────────────────┘
-```
+![alt text](vpc-module.jpg)
 
 ---
 
